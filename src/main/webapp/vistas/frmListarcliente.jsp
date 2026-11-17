@@ -1,25 +1,28 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List, modelo.Cliente" %>
+<%@page import="java.util.List"%>
+<%@page import="modelo.Cliente"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lista de Clientes</title>
+    <meta charset="UTF-8">
+    <title>Listado de Clientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body bgcolor="#FFFFCC" text="#000000">
-    <h1 align="center" style="color: red;">LISTA DE CLIENTES</h1>
-    
-    <%
-        String mensaje = request.getParameter("m");
-        if (mensaje != null) {
-    %>
-        <script>alert("<%= mensaje %>");</script>
-    <%
-        }
-    %>
+<body class="container mt-4">
+    <h2>Gestión de Clientes</h2>
 
-    <table width="900" border="1" align="center" cellpadding="5" cellspacing="0">
-        <thead>
-            <tr bgcolor="#E0E0E0">
+    <% if (request.getParameter("m") != null) { %>
+        <div class="alert alert-info" id="mensajeAlerta">
+            <%= request.getParameter("m") %>
+        </div>
+    <% } %>
+
+    <a href="${pageContext.request.contextPath}/vistas/frmRegistrarcliente.jsp" class="btn btn-success mb-3">+ Nuevo Cliente</a>
+    <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-outline-secondary mb-3">Inicio</a>
+
+    <table class="table table-bordered table-striped" id="tablaClientes">
+        <thead class="table-dark">
+            <tr>
                 <th>ID</th>
                 <th>DNI</th>
                 <th>Apellidos</th>
@@ -27,8 +30,7 @@
                 <th>Email</th>
                 <th>Celular</th>
                 <th>Dirección</th>
-                <th>Acción</th>
-                <th>Acción</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -38,20 +40,17 @@
                     for (Cliente c : lista) {
             %>
             <tr>
-                <td align="center"><%= c.getId() %></td>
-                <td align="center"><%= c.getDni() %></td>
+                <td><%= c.getId() %></td>
+                <td><%= c.getDni() %></td>
                 <td><%= c.getApellidos() %></td>
                 <td><%= c.getNombres() %></td>
                 <td><%= c.getEmail() %></td>
-                <td align="center"><%= c.getCelular() %></td>
+                <td><%= c.getCelular() %></td>
                 <td><%= c.getDireccion() %></td>
-                <td align="center">
-                <a href="${pageContext.request.contextPath}/ClienteControlador?accion=modificarForm&id=<%= c.getId() %>">Modificar</a>
+                <td>
+                    <a href="ClienteControlador?accion=modificarForm&id=<%= c.getId() %>" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="ClienteControlador?accion=eliminar&id=<%= c.getId() %>" class="btn btn-danger btn-sm">Eliminar</a>
                 </td>
-                <td align="center">
-                <a href="${pageContext.request.contextPath}/ClienteControlador?accion=eliminar&id=<%= c.getId() %>" onclick="return confirm('¿Desea eliminar este cliente?');">Eliminar</a>
-            </td>
-</td>
             </tr>
             <%
                     }
@@ -59,9 +58,5 @@
             %>
         </tbody>
     </table>
-    <br>
-    <p align="center">
-    <a href="${pageContext.request.contextPath}/index.jsp">Volver al Inicio</a>
-</p>
 </body>
 </html>
